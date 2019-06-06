@@ -5,6 +5,8 @@ import Grid from '@material-ui/core/Grid';
 
 import CreateIcon from '@material-ui/icons/Create';
 
+import { ListQuestion } from '../components'
+
 export default class Home extends Component {
   render() {
     return (
@@ -17,7 +19,7 @@ export default class Home extends Component {
           </Button>
         </Grid>
         <Grid container>
-          This is going to be the list of question in home
+          <ListQuestion />
         </Grid>
       </Grid>
     )

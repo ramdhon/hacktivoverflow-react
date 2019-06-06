@@ -97,7 +97,7 @@ function NavBar() {
           </div>
           <div className={classes.root} />
           <Link to="/user/questions">
-            <Button color="" className={classes.button}>My Questions</Button>
+            <Button color="default" className={classes.button}>My Questions</Button>
           </Link>
           <Button className={classes.button}>Login</Button>
           <Button className={classes.button}>Register</Button>

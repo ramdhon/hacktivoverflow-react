@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 
 import { Home, MyQuestions } from './views'
 
-import { NavBar } from './components'
+import { NavBar, WatchedTags } from './components'
 
 import { createMuiTheme } from '@material-ui/core/styles';
 import { ThemeProvider } from '@material-ui/styles';
@@ -39,8 +39,8 @@ class Root extends Component {
                   <Route path="/user/questions" render={(props) => (<MyQuestions {...props} />)} />
                 </Switch>
               </Grid>
-              <Grid style={{ backgroundColor: "orange", paddingLeft: "20px" }} item xs={4}>
-                Watched Tags Part
+              <Grid style={{ paddingLeft: "20px" }} item xs={4}>
+                <WatchedTags />
               </Grid>
             </Grid>
           </Container>
