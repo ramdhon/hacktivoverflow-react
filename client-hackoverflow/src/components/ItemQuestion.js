@@ -1,12 +1,20 @@
 import React from 'react';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemText from '@material-ui/core/ListItemText';
-import Grid from '@material-ui/core/Grid';
-import Typography from '@material-ui/core/Typography';
 
+import { ListItem, ListItemText, Grid, Typography } from '@material-ui/core';
 import { CounterDisplay, ListTags } from './index'
 
 function ItemList() {
+  const [chipData] = React.useState([
+    { key: 0, label: 'Angular' },
+    { key: 1, label: 'jQuery' },
+    { key: 2, label: 'Polymer' },
+    { key: 3, label: 'React' },
+    { key: 4, label: 'Vue.js' },
+    { key: 5, label: 'Vue.js' },
+    { key: 6, label: 'Vue.js' },
+    { key: 7, label: 'Vue.js' },
+  ]);
+
   return (
     <ListItem button divider>
       <ListItemText primary={
@@ -19,7 +27,7 @@ function ItemList() {
             <Typography variant="h6" component="p">
               This is going to be question
             </Typography>
-            <ListTags />
+            <ListTags title="Tags" tags={chipData} />
           </Grid>
           <Grid item xs={2}>
             <Grid container justify="flex-end">

@@ -1,14 +1,12 @@
 import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import Card from '@material-ui/core/Card';
-import CardActions from '@material-ui/core/CardActions';
-import CardContent from '@material-ui/core/CardContent';
-import Typography from '@material-ui/core/Typography';
-import Grid from '@material-ui/core/Grid';
-import IconButton from '@material-ui/core/IconButton';
 
-import WatchedIcon from '@material-ui/icons/Visibility';
-import UpdateIcon from '@material-ui/icons/Create';
+import { makeStyles } from '@material-ui/core/styles';
+import { Card, CardActions, CardContent, Typography, Grid, IconButton, Divider } from '@material-ui/core';
+import {
+  Visibility as WatchedIcon,
+  Create as UpdateIcon
+} from '@material-ui/icons';
+import { ListTags } from './index'
 
 const useStyles = makeStyles({
   card: {
@@ -18,6 +16,13 @@ const useStyles = makeStyles({
 
 export default function SimpleCard() {
   const classes = useStyles();
+  const [chipData] = React.useState([
+    { key: 0, label: 'Angular' },
+    { key: 1, label: 'jQuery' },
+    { key: 2, label: 'Polymer' },
+    { key: 3, label: 'React' },
+    { key: 4, label: 'Vue.js' },
+  ]);
 
   return (
     <Card className={classes.card}>
@@ -27,9 +32,8 @@ export default function SimpleCard() {
           &nbsp;
           Watched tags
         </Typography>
-        <Typography variant="body2" component="p">
-          This is going to be chips
-        </Typography>
+        <Divider style={{ margin: "15px" }} />
+        <ListTags title="Watched" tags={chipData} />
       </CardContent>
       <CardActions>
         <Grid container justify="flex-end">

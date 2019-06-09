@@ -1,8 +1,9 @@
 import React from 'react';
+
 import { makeStyles } from '@material-ui/core/styles';
-import Chip from '@material-ui/core/Chip';
-import Paper from '@material-ui/core/Paper';
-import TagFacesIcon from '@material-ui/icons/TagFaces';
+import { Chip } from '@material-ui/core';
+import { Label as TagIcon } from '@material-ui/icons';
+import { withRouter } from 'react-router-dom'
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -16,48 +17,33 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-function ChipsArray() {
+function ChipsArray(props) {
   const classes = useStyles();
-  const [chipData, setChipData] = React.useState([
-    { key: 0, label: 'Angular' },
-    { key: 1, label: 'jQuery' },
-    { key: 2, label: 'Polymer' },
-    { key: 3, label: 'React' },
-    { key: 4, label: 'Vue.js' },
-  ]);
+  const { title, tags } = props;
 
-  const handleDelete = data => () => {
-    if (data.label === 'React') {
-      alert('Why would you want to delete React?! :)');
-      return;
-    }
-
-    const chipToDelete = chipData.indexOf(data);
-    chipData.splice(chipToDelete, 1);
-    setChipData(chipData);
-  };
+  const test = (key) => () => {
+    props.history.push(`?search=${key}`)
+  }
 
   return (
-    <Paper className={classes.root}>
-      {chipData.map(data => {
-        let icon;
-
-        if (data.label === 'React') {
-          icon = <TagFacesIcon />;
-        }
-
-        return (
-          <Chip
-            key={data.key}
-            icon={icon}
-            label={data.label}
-            onDelete={handleDelete(data)}
-            className={classes.chip}
-          />
-        );
-      })}
-    </Paper>
+    <React.Fragment>
+      <Chip size="small" label={title} icon={<TagIcon />} color="primary" />
+      {
+        tags.map(data => 
+        (
+            <Chip
+              size="small"
+              key={data.key}
+              label={data.label}
+              className={classes.chip}
+              clickable
+              onClick={test(data.label)}
+            />
+          )
+        )
+      }
+    </React.Fragment>
   );
 }
 
-export default ChipsArray;
+export default withRouter(ChipsArray);
