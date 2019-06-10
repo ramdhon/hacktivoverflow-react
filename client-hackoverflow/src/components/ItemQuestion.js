@@ -27,7 +27,7 @@ function ItemList() {
             <Typography variant="h6" component="p">
               This is going to be question
             </Typography>
-            <ListTags title="Tags" tags={chipData} />
+            <ListTags title="Tags" tags={chipData} size="small" />
           </Grid>
           <Grid item xs={2}>
             <Grid container justify="flex-end">

@@ -33,7 +33,7 @@ export default function SimpleCard() {
           Watched tags
         </Typography>
         <Divider style={{ margin: "15px" }} />
-        <ListTags title="Watched" tags={chipData} />
+        <ListTags title="Watched" tags={chipData} size="medium" deleted />
       </CardContent>
       <CardActions>
         <Grid container justify="flex-end">

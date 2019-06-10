@@ -3,12 +3,11 @@ import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
 import { connect } from 'react-redux'
 
 import { Home, MyQuestions } from './views'
-import { NavBar, WatchedTags } from './components'
+import { NavBar, WatchedTags, QuestionForm } from './components'
 import { createMuiTheme } from '@material-ui/core/styles';
 import { ThemeProvider } from '@material-ui/styles';
 import { orange } from '@material-ui/core/colors';
-import { Container, Grid, Button } from '@material-ui/core';
-import{ Create as CreateIcon }from '@material-ui/icons';
+import { Container, Grid } from '@material-ui/core';
 
 const theme = createMuiTheme({
   palette: {
@@ -31,13 +30,7 @@ class Root extends Component {
           <Container style={{ paddingTop: "100px" }} fixed>
             <Grid container>
               <Grid style={{ paddingRight: "20px" }} item xs={8}>
-                <Grid container justify="flex-end">
-                  <Button variant="contained" color="primary">
-                    <CreateIcon />
-                    &nbsp;
-                    QUESTION
-                  </Button>
-                </Grid>
+                <QuestionForm />
                 <Switch>
                   <Route path="/" exact render={(props) => (<Home {...props} />)} />
                   <Route path="/user/questions" render={(props) => (<MyQuestions {...props} />)} />

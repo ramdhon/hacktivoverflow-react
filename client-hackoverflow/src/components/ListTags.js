@@ -2,7 +2,9 @@ import React from 'react';
 
 import { makeStyles } from '@material-ui/core/styles';
 import { Chip } from '@material-ui/core';
-import { Label as TagIcon } from '@material-ui/icons';
+import {
+  Label as TagIcon,
+} from '@material-ui/icons';
 import { withRouter } from 'react-router-dom'
 
 const useStyles = makeStyles(theme => ({
@@ -19,25 +21,30 @@ const useStyles = makeStyles(theme => ({
 
 function ChipsArray(props) {
   const classes = useStyles();
-  const { title, tags } = props;
+  const { title, tags, size, deleted } = props;
 
   const test = (key) => () => {
     props.history.push(`?search=${key}`)
   }
 
+  const handleDelete = () => {
+    console.log('done')
+  }
+
   return (
     <React.Fragment>
-      <Chip size="small" label={title} icon={<TagIcon />} color="primary" />
+      <Chip className={classes.chip} size={size} label={title} icon={<TagIcon />} color="primary" />
       {
         tags.map(data => 
         (
             <Chip
-              size="small"
+              size={size}
               key={data.key}
               label={data.label}
               className={classes.chip}
               clickable
               onClick={test(data.label)}
+              onDelete={deleted ? handleDelete : false}
             />
           )
         )
