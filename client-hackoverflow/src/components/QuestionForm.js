@@ -9,17 +9,17 @@ import {
   Close as CloseIcon
 } from '@material-ui/icons';
 
-// // Require Editor JS files.
-// import 'froala-editor/js/froala_editor.pkgd.min.js';
+// Require Editor JS files.
+import 'froala-editor/js/froala_editor.pkgd.min.js';
 
-// // Require Editor CSS files.
-// import 'froala-editor/css/froala_style.min.css';
-// import 'froala-editor/css/froala_editor.pkgd.min.css';
+// Require Editor CSS files.
+import 'froala-editor/css/froala_style.min.css';
+import 'froala-editor/css/froala_editor.pkgd.min.css';
 
-// // Require Font Awesome.
-// import 'font-awesome/css/font-awesome.css';
+// Require Font Awesome.
+import 'font-awesome/css/font-awesome.css';
 
-// import FroalaEditor from 'react-froala-wysiwyg';
+import FroalaEditor from 'react-froala-wysiwyg';
 
 const styles = theme => ({
   root: {
@@ -43,10 +43,13 @@ class SimpleCollapse extends React.Component {
     model: ''
   };
 
-  handleModelChange = function(model) {
+  handleModelChange = (model) => {
     this.setState({
-      model: model
-    });
+      question: {
+        ...this.state.question,
+        description: model
+      }
+    })
   }
 
   handleChange = (e) => {
@@ -98,17 +101,15 @@ class SimpleCollapse extends React.Component {
                 value={this.state.question.title}
                 onChange={this.handleChange}
               />
-              <TextField
-                className={classes.input}
-                id="description"
-                fullWidth
-                multiline
-                rows="3"
-                label="Description"
-                margin="normal"
-                value={this.state.question.description}
-                onChange={this.handleChange}
+              <p>{this.state.question.description}</p>
+              <span dangerouslySetInnerHTML={{__html: this.state.question.description}} />
+              <FroalaEditor
+                tag='textarea'
+                config={this.config}
+                model={this.state.question.description}
+                onModelChange={this.handleModelChange}
               />
+
               <Grid container justify="flex-end">
                 <Button className={classes.input} type="submit">Submit</Button>
               </Grid>

@@ -21,14 +21,14 @@ const useStyles = makeStyles(theme => ({
 
 function ChipsArray(props) {
   const classes = useStyles();
-  const { title, tags, size, deleted } = props;
+  const { title, tags, size, deleted, onDeleteTags } = props;
 
   const test = (key) => () => {
     props.history.push(`?search=${key}`)
   }
 
-  const handleDelete = () => {
-    console.log('done')
+  const handleDelete = (key) => () => {
+    onDeleteTags(key)
   }
 
   return (
@@ -36,7 +36,17 @@ function ChipsArray(props) {
       <Chip className={classes.chip} size={size} label={title} icon={<TagIcon />} color="primary" />
       {
         tags.map(data => 
-        (
+          ( 
+            deleted ?
+            <Chip
+              size={size}
+              key={data.key}
+              label={data.label}
+              className={classes.chip}
+              clickable
+              onDelete={handleDelete(data.key)}
+            />
+            :
             <Chip
               size={size}
               key={data.key}
@@ -44,7 +54,6 @@ function ChipsArray(props) {
               className={classes.chip}
               clickable
               onClick={test(data.label)}
-              onDelete={deleted ? handleDelete : false}
             />
           )
         )
