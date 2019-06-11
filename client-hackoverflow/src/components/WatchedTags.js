@@ -1,10 +1,12 @@
 import React from 'react';
 
 import { makeStyles } from '@material-ui/core/styles';
-import { Card, CardActions, CardContent, Typography, Grid, IconButton, Divider } from '@material-ui/core';
+import { Card, CardActions, CardContent, Typography, Grid, IconButton, Divider, Collapse } from '@material-ui/core';
 import {
   Visibility as WatchedIcon,
-  Create as UpdateIcon
+  Create as UpdateIcon,
+  ExpandLess as CloseIcon,
+  Save as SaveIcon
 } from '@material-ui/icons';
 import { ListTags, WatchedForm } from './index'
 
@@ -26,11 +28,29 @@ export default function SimpleCard() {
     { key: 3, label: 'React' },
     { key: 4, label: 'Vue.js' },
   ]);
+  const [chipEditing, setChipEditing] = React.useState([
+    { key: 0, label: 'Angular' },
+    { key: 1, label: 'jQuery' },
+    { key: 2, label: 'Polymer' },
+    { key: 3, label: 'React' },
+    { key: 4, label: 'Vue.js' },
+  ]);
+  const [editing, setEditing] = React.useState(false)
   const handleSubmit = (input) => {
-    setChipData([...chipData, { key: chipData.length, label: input }])
+    if (chipEditing.findIndex(data => data.label === input) === -1) {
+      setChipEditing([...chipEditing, { key: chipEditing.length, label: input }])
+    }
   }
   const handleDelete = (key) => {
-    setChipData(chipData.filter(data => data.key !== key))
+    setChipEditing(chipEditing.filter(data => data.key !== key))
+  }
+  const handleUpdate = () => {
+    setChipData(chipEditing);
+    setEditing(!editing);
+  }
+  const toggle = () => {
+    setChipEditing(chipData);
+    setEditing(!editing);
   }
 
   return (
@@ -43,15 +63,33 @@ export default function SimpleCard() {
             Watched tags
           </Typography>
           <Divider style={{ margin: "15px" }} />
-          <WatchedForm onSubmitTags={handleSubmit} />
-          <div className={classes.form}/>
-          <ListTags title="Watched" tags={chipData} size="medium" deleted onDeleteTags={handleDelete} />
+          <Collapse in={editing}>
+            <WatchedForm onSubmitTags={handleSubmit} />
+            <div className={classes.form}/>
+          </Collapse>
+          {
+            editing ?
+            <ListTags title="Watched" tags={chipEditing} size="medium" deleted onDeleteTags={handleDelete} />
+            :
+            <ListTags title="Watched" tags={chipData} size="medium" />
+          }
         </CardContent>
         <CardActions>
           <Grid container>
             <Grid container justify="flex-end">
-              <IconButton color="default">
-                <UpdateIcon />
+              {
+                editing &&
+                <IconButton onClick={handleUpdate} color="default">
+                  <SaveIcon />
+                </IconButton>
+              }
+              <IconButton onClick={toggle} color="default">
+                {
+                  editing ?
+                  <CloseIcon />
+                  :
+                  <UpdateIcon />
+                }
               </IconButton>
             </Grid>
           </Grid>
