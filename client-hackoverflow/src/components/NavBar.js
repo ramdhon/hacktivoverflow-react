@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom'
+import { connect } from 'react-redux'
 
 import { AppBar, Toolbar, IconButton, Typography, InputBase, Button } from '@material-ui/core';
 // import { fade } from '@material-ui/core/styles/colorManipulator';
@@ -9,6 +10,7 @@ import {
   ExitToApp as LogoutIcon,
   Search as SearchIcon
 } from '@material-ui/icons';
+import { LinearLoading } from './index'
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -64,8 +66,9 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-function NavBar() {
+function NavBar(props) {
   const classes = useStyles();
+  const { isLoading } = props;
 
   return (
     <div className={classes.root}>
@@ -102,9 +105,26 @@ function NavBar() {
             <LogoutIcon />
           </IconButton>
         </Toolbar>
+        {
+          isLoading &&
+          <LinearLoading />
+        }
       </AppBar>
     </div>
   );
 }
 
-export default NavBar;
+const mapStateToProps = (state) => {
+  const { isLoading } = state;
+
+  return {
+    isLoading
+  }
+}
+
+const mapDispatchToProps = {
+  
+}
+
+
+export default connect(mapStateToProps, mapDispatchToProps)(NavBar);

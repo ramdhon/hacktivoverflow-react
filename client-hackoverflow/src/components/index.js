@@ -6,6 +6,7 @@ import CounterDisplay from './CounterDisplay'
 import ListTags from './ListTags'
 import QuestionForm from './QuestionForm'
 import WatchedForm from './WatchedForm'
+import LinearLoading from './LinearLoading'
 
 export {
   NavBar,
@@ -15,5 +16,6 @@ export {
   CounterDisplay,
   ListTags,
   QuestionForm,
-  WatchedForm
+  WatchedForm,
+  LinearLoading
 }

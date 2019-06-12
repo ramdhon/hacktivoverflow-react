@@ -1,43 +1,54 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from '../api/server'
+import moment from 'moment'
 
 import { ListItem, ListItemText, Grid, Typography } from '@material-ui/core';
 import { CounterDisplay, ListTags } from './index'
 
-function ItemList() {
-  const [chipData] = React.useState([
-    { key: 0, label: 'Angular' },
-    { key: 1, label: 'jQuery' },
-    { key: 2, label: 'Polymer' },
-    { key: 3, label: 'React' },
-    { key: 4, label: 'Vue.js' },
-    { key: 5, label: 'Vue.js' },
-    { key: 6, label: 'Vue.js' },
-    { key: 7, label: 'Vue.js' },
-  ]);
+function ItemList(props) {
+  const [answers, setAnswers] = useState([]);
+  const { question } = props;
+  const totalVotes = () => {
+    return question.upvotes.length - question.downvotes.length;
+  }
+  const totalAnswers = () => {
+    return answers.length;
+  }
+  useEffect(() => {
+    axios
+      .get(`/questions/${question._id}/answers`)
+      .then(({ data }) => {
+        console.log(data);
+        setAnswers(data.answers);
+      })
+      .catch(err => {
+        console.log(err);
+      })
+  }, [answers.length])
 
   return (
     <ListItem button divider>
       <ListItemText primary={
         <Grid container>
           <Grid container item xs={2}>
-            <CounterDisplay total={-1} legend={'votes'} />
-            <CounterDisplay total={3} legend={'answers'} />
+            <CounterDisplay total={totalVotes()} legend={'votes'} />
+            <CounterDisplay total={totalAnswers()} legend={'answers'} />
           </Grid>
           <Grid style={{ paddingLeft: "10px", paddingRight: "10px" }} item xs={8}>
             <Typography variant="h6" component="p">
-              This is going to be question
+              {question.title}
             </Typography>
-            <ListTags title="Tags" tags={chipData} size="small" />
+            <ListTags title="Tags" tags={question.tags.map((tag, index) => ({ key: index, label: tag.title }))} size="small" />
           </Grid>
           <Grid item xs={2}>
             <Grid container justify="flex-end">
               <Typography color="textSecondary" variant="caption" component="span">
-                5 min(s) ago
+                {moment(question.created).fromNow()}
               </Typography>
             </Grid>
             <Grid container justify="flex-end">
               <Typography color="textSecondary" variant="caption" component="span">
-                by ramdhon
+                by {question.creator.name}
               </Typography>
             </Grid>
           </Grid>
