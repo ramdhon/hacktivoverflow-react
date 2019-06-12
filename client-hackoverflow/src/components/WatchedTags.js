@@ -8,7 +8,7 @@ import {
   ExpandLess as CloseIcon,
   Save as SaveIcon
 } from '@material-ui/icons';
-import { ListTags, WatchedForm } from './index'
+import { ListTags, TagsForm } from './index'
 
 const useStyles = makeStyles({
   card: {
@@ -38,7 +38,7 @@ export default function SimpleCard() {
   const [editing, setEditing] = React.useState(false)
   const handleSubmit = (input) => {
     if (chipEditing.findIndex(data => data.label === input) === -1) {
-      setChipEditing([...chipEditing, { key: chipEditing.length, label: input }])
+      setChipEditing([...chipEditing, { key: chipEditing[chipEditing.length - 1].key + 1, label: input }])
     }
   }
   const handleDelete = (key) => {
@@ -64,8 +64,8 @@ export default function SimpleCard() {
           </Typography>
           <Divider style={{ margin: "15px" }} />
           <Collapse in={editing}>
-            <WatchedForm onSubmitTags={handleSubmit} />
-            <div className={classes.form}/>
+            <TagsForm onSubmitTags={handleSubmit} />
+            <div className={classes.form} />
           </Collapse>
           {
             editing ?

@@ -35,7 +35,7 @@ function ChipsArray(props) {
     <React.Fragment>
       <Chip className={classes.chip} size={size} label={title} icon={<TagIcon />} color="primary" />
       {
-        tags.map(data => 
+        tags && tags.map(data => 
           ( 
             deleted ?
             <Chip

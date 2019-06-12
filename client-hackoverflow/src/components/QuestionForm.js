@@ -8,6 +8,7 @@ import {
   Create as CreateIcon,
   Close as CloseIcon
 } from '@material-ui/icons';
+import { TagsForm, ListTags } from './index';
 
 // Require Editor JS files.
 import 'froala-editor/js/froala_editor.pkgd.min.js';
@@ -26,7 +27,8 @@ const styles = theme => ({
     padding: '0 100px'
   },
   form: {
-    width: '100%'
+    width: '100%',
+    marginBottom: 25
   },
   input: {
     marginBottom: '30px'
@@ -38,10 +40,33 @@ class SimpleCollapse extends React.Component {
     checked: false,
     question: {
       title: '',
-      description: ''
+      description: '',
+      tags: []
     },
     model: ''
   };
+
+  handleSubmit = (input) => {
+    const { length } = this.state.question.tags;
+
+    if (this.state.question.tags.findIndex(data => data.label === input) === -1) {
+      this.setState({
+        question: {
+          ...this.state.question,
+          tags: [...this.state.question.tags, { key: this.state.question.tags[length - 1].key + 1, label: input }]
+        }
+      })
+    }
+  }
+
+  handleDelete = (key) => {
+    this.setState({
+      question: {
+        ...this.state.question,
+        tags: this.state.question.tags.filter(data => data.key !== key)
+      }
+    })
+  }
 
   handleModelChange = (model) => {
     this.setState({
@@ -67,11 +92,17 @@ class SimpleCollapse extends React.Component {
   
   submitQuestion = (e) => {
     e.preventDefault();
+    const { onSubmitQuestion } = this.props;
+    const { title, description } = this.state.question;
+    const tags = this.state.question.tags.map(tag => tag.label);
+
+    onSubmitQuestion({ title, description, tags });
     this.setState({
       checked: !this.state.checked,
       question: {
         title: '',
-        description: ''
+        description: '',
+        tags: []
       },
     })
   };
@@ -109,7 +140,11 @@ class SimpleCollapse extends React.Component {
                 model={this.state.question.description}
                 onModelChange={this.handleModelChange}
               />
-
+              <div className={classes.form} />
+              <TagsForm onSubmitTags={this.handleSubmit} isQuestion />
+              <div className={classes.form} />
+              <ListTags title="Tags" tags={this.state.question.tags} size="medium" deleted onDeleteTags={this.handleDelete} />
+              <div className={classes.form} />
               <Grid container justify="flex-end">
                 <Button className={classes.input} type="submit">Submit</Button>
               </Grid>

@@ -43,10 +43,18 @@ const suggestions = [
 ];
 
 function renderInput(inputProps) {
-  const { InputProps, classes, ref, ...other } = inputProps;
+  const { InputProps, classes, ref, inputValue, onSubmitTags, clearSelection, ...other } = inputProps;
+  const handlePress = (e) => {
+    if (e.charCode === 13) {
+      e.preventDefault();
+      onSubmitTags(inputValue);
+      clearSelection();
+    }
+  }
 
   return (
     <TextField
+      onKeyPress={handlePress}
       InputProps={{
         inputRef: ref,
         classes: {
@@ -139,12 +147,6 @@ export default function IntegrationDownshift(props) {
   const classes = useStyles();
   const { onSubmitTags } = props;
 
-  const submitTags = (inputValue, clearSelection) => (e) => {
-    e.preventDefault();
-    onSubmitTags(inputValue)
-    clearSelection();
-  }
-
   return (
     <div className={classes.root}>
       <Downshift id="downshift-options">
@@ -171,34 +173,35 @@ export default function IntegrationDownshift(props) {
           });
 
           return (
-            <form onSubmit={submitTags(inputValue, clearSelection)}>
-              <div className={classes.container}>
-                {renderInput({
-                  fullWidth: true,
-                  classes,
-                  label: 'Input Watched Tags',
-                  InputLabelProps: getLabelProps({ shrink: true }),
-                  InputProps: { onBlur, onChange, onFocus },
-                  inputProps,
-                })}
+            <div className={classes.container}>
+              {renderInput({
+                fullWidth: true,
+                classes,
+                label: 'Input Watched Tags',
+                InputLabelProps: getLabelProps({ shrink: true }),
+                InputProps: { onBlur, onChange, onFocus },
+                inputProps,
+                inputValue,
+                clearSelection,
+                onSubmitTags,
+              })}
 
-                <div {...getMenuProps()}>
-                  {isOpen ? (
-                    <Paper className={classes.paper} square>
-                      {getSuggestions(inputValue, { showEmpty: true }).map((suggestion, index) =>
-                        renderSuggestion({
-                          suggestion,
-                          index,
-                          itemProps: getItemProps({ item: suggestion.label }),
-                          highlightedIndex,
-                          selectedItem,
-                        }),
-                      )}
-                    </Paper>
-                  ) : null}
-                </div>
+              <div {...getMenuProps()}>
+                {isOpen ? (
+                  <Paper className={classes.paper} square>
+                    {getSuggestions(inputValue, { showEmpty: true }).map((suggestion, index) =>
+                      renderSuggestion({
+                        suggestion,
+                        index,
+                        itemProps: getItemProps({ item: suggestion.label }),
+                        highlightedIndex,
+                        selectedItem,
+                      }),
+                    )}
+                  </Paper>
+                ) : null}
               </div>
-            </form>
+            </div>
           );
         }}
       </Downshift>

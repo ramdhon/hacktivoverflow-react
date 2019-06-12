@@ -5,7 +5,7 @@ import WatchedTags from './WatchedTags'
 import CounterDisplay from './CounterDisplay'
 import ListTags from './ListTags'
 import QuestionForm from './QuestionForm'
-import WatchedForm from './WatchedForm'
+import TagsForm from './TagsForm'
 import LinearLoading from './LinearLoading'
 import LoginForm from './LoginForm'
 import RegisterForm from './RegisterForm'
@@ -18,7 +18,7 @@ export {
   CounterDisplay,
   ListTags,
   QuestionForm,
-  WatchedForm,
+  TagsForm,
   LinearLoading,
   LoginForm,
   RegisterForm

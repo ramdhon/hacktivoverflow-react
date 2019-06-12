@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
 import { connect } from 'react-redux'
+import axios from './api/server'
 
 import { Home, MyQuestions } from './views'
 import { NavBar, WatchedTags, QuestionForm } from './components'
@@ -20,7 +21,9 @@ const theme = createMuiTheme({
 
 class Root extends Component {
   state = {
-
+    newQuestion: {
+      _id: ''
+    }
   }
 
   checkLog = () => {
@@ -33,11 +36,29 @@ class Root extends Component {
     }
   }
 
+  handleSubmitQuestion = (data) => {
+    const { title, description, tags } = data;
+    const { token } = localStorage;
+
+    axios
+      .post('/questions', { title, description, tags }, { headers: { token }})
+      .then(({ data }) => {
+        this.setState({
+          newQuestion: data.newQuestion
+        })
+      })
+      .catch(err => {
+        console.log(err)
+      })
+  }
+
   componentDidMount() {
     this.checkLog();
   }
 
   render () {
+    const { isLogin } = this.props;
+
     return (
       <Router>
         <ThemeProvider theme={theme}>
@@ -45,14 +66,17 @@ class Root extends Component {
           <Container style={{ paddingTop: "100px" }} fixed>
             <Grid container>
               <Grid style={{ paddingRight: "20px" }} item xs={8}>
-                <QuestionForm />
+                <QuestionForm onSubmitQuestion={this.handleSubmitQuestion} />
                 <Switch>
-                  <Route path="/" exact render={(props) => (<Home {...props} />)} />
+                  <Route path="/" exact render={(props) => (<Home newQuestion={this.state.newQuestion} {...props} />)} />
                   <Route path="/user/questions" render={(props) => (<MyQuestions {...props} />)} />
                 </Switch>
               </Grid>
               <Grid style={{ paddingLeft: "20px" }} item xs={4}>
-                <WatchedTags />
+                {
+                  isLogin &&
+                  <WatchedTags />
+                }
               </Grid>
             </Grid>
           </Container>
@@ -63,8 +87,10 @@ class Root extends Component {
 }
 
 const mapStateToProps = (state) => {
-  return {
+  const { isLogin } = state;
 
+  return {
+    isLogin
   }
 }
 
