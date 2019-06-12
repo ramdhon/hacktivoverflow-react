@@ -7,6 +7,8 @@ import ListTags from './ListTags'
 import QuestionForm from './QuestionForm'
 import WatchedForm from './WatchedForm'
 import LinearLoading from './LinearLoading'
+import LoginForm from './LoginForm'
+import RegisterForm from './RegisterForm'
 
 export {
   NavBar,
@@ -17,5 +19,7 @@ export {
   ListTags,
   QuestionForm,
   WatchedForm,
-  LinearLoading
+  LinearLoading,
+  LoginForm,
+  RegisterForm
 }

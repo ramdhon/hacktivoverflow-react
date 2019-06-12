@@ -18,13 +18,19 @@ function ItemList(props) {
     axios
       .get(`/questions/${question._id}/answers`)
       .then(({ data }) => {
-        console.log(data);
         setAnswers(data.answers);
       })
       .catch(err => {
-        console.log(err);
+        const { status } = err.response;
+
+        if (status === 404) {
+          setAnswers([]);
+        } else {
+          console.log(err);
+        }
       })
-  }, [answers.length])
+  // eslint-disable-next-line
+  }, [])
 
   return (
     <ListItem button divider>

@@ -1,5 +1,6 @@
 const defaultState = {
   isLoading: false,
+  isLogin: false,
 }
 
 function reducer (state = defaultState, action) {
@@ -8,6 +9,11 @@ function reducer (state = defaultState, action) {
       return {
         ...state,
         isLoading: action.payload
+      }
+    case 'SET_LOGIN':
+      return {
+        ...state,
+        isLogin: action.payload
       }
     default:
       return state

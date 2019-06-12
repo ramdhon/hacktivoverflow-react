@@ -4,3 +4,10 @@ export function setLoading (payload = true) {
     payload
   }
 }
+
+export function setLogin (payload = true) {
+  return {
+    type: 'SET_LOGIN',
+    payload
+  }
+}

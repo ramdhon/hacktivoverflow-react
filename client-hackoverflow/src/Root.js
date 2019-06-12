@@ -8,6 +8,7 @@ import { createMuiTheme } from '@material-ui/core/styles';
 import { ThemeProvider } from '@material-ui/styles';
 import { orange } from '@material-ui/core/colors';
 import { Container, Grid } from '@material-ui/core';
+import { setLogin } from './store/action';
 
 const theme = createMuiTheme({
   palette: {
@@ -20,6 +21,20 @@ const theme = createMuiTheme({
 class Root extends Component {
   state = {
 
+  }
+
+  checkLog = () => {
+    const { setLogin } = this.props;
+
+    if (localStorage.getItem('token')) {
+      setLogin();
+    } else {
+      setLogin(false);
+    }
+  }
+
+  componentDidMount() {
+    this.checkLog();
   }
 
   render () {
@@ -54,7 +69,7 @@ const mapStateToProps = (state) => {
 }
 
 const mapDispatchToProps = {
-
+  setLogin
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Root);

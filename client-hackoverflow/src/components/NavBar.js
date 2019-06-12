@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
 
-import { AppBar, Toolbar, IconButton, Typography, InputBase, Button } from '@material-ui/core';
+import { AppBar, Toolbar, IconButton, Typography, InputBase, Button, Dialog, DialogActions, DialogContent, DialogTitle } from '@material-ui/core';
 // import { fade } from '@material-ui/core/styles/colorManipulator';
 import { makeStyles } from '@material-ui/core/styles';
 import {
@@ -10,7 +10,8 @@ import {
   ExitToApp as LogoutIcon,
   Search as SearchIcon
 } from '@material-ui/icons';
-import { LinearLoading } from './index'
+import { LinearLoading, LoginForm, RegisterForm } from './index'
+import { setLogin } from '../store/action'
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -68,7 +69,30 @@ const useStyles = makeStyles(theme => ({
 
 function NavBar(props) {
   const classes = useStyles();
-  const { isLoading } = props;
+  const { isLoading, isLogin } = props;
+
+  const [open, setOpen] = React.useState(false);
+  const [login, setLogin] = React.useState(false);
+
+  const handleClickOpen = (login = true) => () => {
+    setOpen(true);
+    if (login) {
+      setLogin(true);
+    } else {
+      setLogin(false);
+    }
+  }
+
+  const handleClose = () => {
+    setOpen(false);
+  }
+
+  const handleLogout = () => {
+    const { setLogin } = props; 
+
+    localStorage.removeItem('token');
+    setLogin(false);
+  }
 
   return (
     <div className={classes.root}>
@@ -96,14 +120,50 @@ function NavBar(props) {
             />
           </div>
           <div className={classes.root} />
-          <Link to="/user/questions">
-            <Button color="default" className={classes.button}>My Questions</Button>
-          </Link>
-          <Button className={classes.button}>Login</Button>
-          <Button className={classes.button}>Register</Button>
-          <IconButton color="inherit" edge="end">
-            <LogoutIcon />
-          </IconButton>
+          {
+            isLogin ?
+            <Link to="/user/questions">
+              <Button color="default" className={classes.button}>My Questions</Button>
+            </Link>
+            :
+            <React.Fragment>
+              <Button className={classes.button} onClick={handleClickOpen()}>Login</Button>
+              <Button className={classes.button} onClick={handleClickOpen(false)}>Register</Button>
+            </React.Fragment>
+          }
+          <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
+            <DialogTitle id="form-dialog-title">
+              {
+                login ?
+                <Typography component="span" variant="h5" color="primary">
+                  Let us know you as member!
+                </Typography>
+                :
+                <Typography component="span" variant="h5" color="primary">
+                  Join Us!
+                </Typography>
+              }
+            </DialogTitle>
+            <DialogContent>
+              {
+                login ?
+                <LoginForm onHandleDialog={setOpen} />
+                :
+                <RegisterForm onHandleDialog={setOpen} />
+              }
+            </DialogContent>
+            <DialogActions>
+              <Typography component="span" variant="caption" color="textSecondary">
+                *required fields
+              </Typography>
+            </DialogActions>
+          </Dialog>
+          {
+            isLogin &&
+            <IconButton onClick={handleLogout} color="inherit" edge="end">
+              <LogoutIcon />
+            </IconButton>
+          }
         </Toolbar>
         {
           isLoading &&
@@ -115,15 +175,16 @@ function NavBar(props) {
 }
 
 const mapStateToProps = (state) => {
-  const { isLoading } = state;
+  const { isLoading, isLogin } = state;
 
   return {
-    isLoading
+    isLoading,
+    isLogin
   }
 }
 
 const mapDispatchToProps = {
-  
+  setLogin
 }
 
 
