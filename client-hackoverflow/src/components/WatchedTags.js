@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import axios from '../api/server';
 
 import { makeStyles } from '@material-ui/core/styles';
 import { Card, CardActions, CardContent, Typography, Grid, IconButton, Divider, Collapse } from '@material-ui/core';
@@ -19,32 +20,22 @@ const useStyles = makeStyles({
   }
 });
 
-export default function SimpleCard() {
+export default function SimpleCard(props) {
   const classes = useStyles();
-  const [chipData, setChipData] = React.useState([
-    { key: 0, label: 'Angular' },
-    { key: 1, label: 'jQuery' },
-    { key: 2, label: 'Polymer' },
-    { key: 3, label: 'React' },
-    { key: 4, label: 'Vue.js' },
-  ]);
-  const [chipEditing, setChipEditing] = React.useState([
-    { key: 0, label: 'Angular' },
-    { key: 1, label: 'jQuery' },
-    { key: 2, label: 'Polymer' },
-    { key: 3, label: 'React' },
-    { key: 4, label: 'Vue.js' },
-  ]);
+  const [chipData, setChipData] = React.useState([]);
+  const [chipEditing, setChipEditing] = React.useState([]);
   const [editing, setEditing] = React.useState(false)
+  const { token } = localStorage;
   const handleSubmit = (input) => {
     if (chipEditing.findIndex(data => data.label === input) === -1) {
-      setChipEditing([...chipEditing, { key: chipEditing[chipEditing.length - 1].key + 1, label: input }])
+      setChipEditing([...chipEditing, { key: chipEditing.length !== 0 ? chipEditing[chipEditing.length - 1].key + 1 : 0, label: input }])
     }
   }
   const handleDelete = (key) => {
     setChipEditing(chipEditing.filter(data => data.key !== key))
   }
   const handleUpdate = () => {
+    updateWatched();
     setChipData(chipEditing);
     setEditing(!editing);
   }
@@ -52,6 +43,43 @@ export default function SimpleCard() {
     setChipEditing(chipData);
     setEditing(!editing);
   }
+  const fetchWatched = () => {
+    axios
+      .get('/user/watched', { headers: { token }})
+      .then(({ data }) => {
+        setChipData(data.watched.tags.map((tag, index) => ({ key: index, label: tag })))
+        setChipEditing(chipData);
+      })
+      .catch(err => {
+        console.log(err);
+        const { status } = err.response;
+
+        if (status === 404) {
+          setChipData([]);
+          setChipEditing([]);
+        } else {
+          console.log(err);
+        }
+      })
+  }
+  const updateWatched = () => {
+    const beforeUpdated = [...chipData];
+    const tags = chipEditing.map(tag => tag.label);
+    
+    axios
+      .patch('/user/watched', { tags }, { headers: { token } })
+      .then(({ data }) => {
+        // already updated...
+      })
+      .catch(err => {
+        setChipData(beforeUpdated);
+        setChipEditing(chipData);
+      })
+  }
+  useEffect(() => {
+    fetchWatched();
+  // eslint-disable-next-line
+  }, [])
 
   return (
     <React.Fragment>
@@ -64,7 +92,7 @@ export default function SimpleCard() {
           </Typography>
           <Divider style={{ margin: "15px" }} />
           <Collapse in={editing}>
-            <TagsForm onSubmitTags={handleSubmit} />
+            <TagsForm onSubmitTags={handleSubmit} {...props} />
             <div className={classes.form} />
           </Collapse>
           {

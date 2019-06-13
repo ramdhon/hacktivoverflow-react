@@ -14,6 +14,7 @@ function ItemList(props) {
   const totalAnswers = () => {
     return answers.length;
   }
+  
   useEffect(() => {
     axios
       .get(`/questions/${question._id}/answers`)
@@ -30,7 +31,7 @@ function ItemList(props) {
         }
       })
   // eslint-disable-next-line
-  }, [])
+  }, [question._id])
 
   return (
     <ListItem button divider>

@@ -23,7 +23,8 @@ class Root extends Component {
   state = {
     newQuestion: {
       _id: ''
-    }
+    },
+    tagsSuggestions: []
   }
 
   checkLog = () => {
@@ -31,11 +32,33 @@ class Root extends Component {
 
     if (localStorage.getItem('token')) {
       setLogin();
+      this.fetchTags();
     } else {
       setLogin(false);
     }
   }
 
+  fetchTags = () => {
+    axios
+      .get('/tags')
+      .then(({ data }) => {
+        this.setState({
+          tagsSuggestions: data.tags.map(tag => ({ label: tag.title }))
+        })
+      })
+      .catch(err => {
+        const { status } = err.response;
+
+        if (status === 404) {
+          this.setState({
+            tagsSuggestions: []
+          })
+        } else {
+          console.log(err);
+        }
+      })
+  }
+  
   handleSubmitQuestion = (data) => {
     const { title, description, tags } = data;
     const { token } = localStorage;
@@ -75,7 +98,7 @@ class Root extends Component {
               <Grid style={{ paddingLeft: "20px" }} item xs={4}>
                 {
                   isLogin &&
-                  <WatchedTags />
+                  <WatchedTags suggestions={this.state.tagsSuggestions} />
                 }
               </Grid>
             </Grid>

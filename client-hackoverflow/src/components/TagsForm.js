@@ -1,46 +1,10 @@
 import React from 'react';
+
 import PropTypes from 'prop-types';
 import deburr from 'lodash/deburr';
 import Downshift from 'downshift';
 import { makeStyles } from '@material-ui/core/styles';
 import { TextField, Paper, MenuItem } from '@material-ui/core';
-
-const suggestions = [
-  { label: 'Afghanistan' },
-  { label: 'Aland Islands' },
-  { label: 'Albania' },
-  { label: 'Algeria' },
-  { label: 'American Samoa' },
-  { label: 'Andorra' },
-  { label: 'Angola' },
-  { label: 'Anguilla' },
-  { label: 'Antarctica' },
-  { label: 'Antigua and Barbuda' },
-  { label: 'Argentina' },
-  { label: 'Armenia' },
-  { label: 'Aruba' },
-  { label: 'Australia' },
-  { label: 'Austria' },
-  { label: 'Azerbaijan' },
-  { label: 'Bahamas' },
-  { label: 'Bahrain' },
-  { label: 'Bangladesh' },
-  { label: 'Barbados' },
-  { label: 'Belarus' },
-  { label: 'Belgium' },
-  { label: 'Belize' },
-  { label: 'Benin' },
-  { label: 'Bermuda' },
-  { label: 'Bhutan' },
-  { label: 'Bolivia, Plurinational State of' },
-  { label: 'Bonaire, Sint Eustatius and Saba' },
-  { label: 'Bosnia and Herzegovina' },
-  { label: 'Botswana' },
-  { label: 'Bouvet Island' },
-  { label: 'Brazil' },
-  { label: 'British Indian Ocean Territory' },
-  { label: 'Brunei Darussalam' },
-];
 
 function renderInput(inputProps) {
   const { InputProps, classes, ref, inputValue, onSubmitTags, clearSelection, ...other } = inputProps;
@@ -95,7 +59,7 @@ renderSuggestion.propTypes = {
   suggestion: PropTypes.shape({ label: PropTypes.string }).isRequired,
 };
 
-function getSuggestions(value, { showEmpty = false } = {}) {
+function getSuggestions(suggestions, value, { showEmpty = false } = {}) {
   const inputValue = deburr(value.trim()).toLowerCase();
   const inputLength = inputValue.length;
   let count = 0;
@@ -145,7 +109,7 @@ const useStyles = makeStyles(theme => ({
 
 export default function IntegrationDownshift(props) {
   const classes = useStyles();
-  const { onSubmitTags } = props;
+  const { onSubmitTags, suggestions } = props;
 
   return (
     <div className={classes.root}>
@@ -189,7 +153,7 @@ export default function IntegrationDownshift(props) {
               <div {...getMenuProps()}>
                 {isOpen ? (
                   <Paper className={classes.paper} square>
-                    {getSuggestions(inputValue, { showEmpty: true }).map((suggestion, index) =>
+                    {getSuggestions(suggestions, inputValue, { showEmpty: true }).map((suggestion, index) =>
                       renderSuggestion({
                         suggestion,
                         index,

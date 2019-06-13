@@ -53,7 +53,7 @@ class SimpleCollapse extends React.Component {
       this.setState({
         question: {
           ...this.state.question,
-          tags: [...this.state.question.tags, { key: this.state.question.tags[length - 1].key + 1, label: input }]
+          tags: [...this.state.question.tags, { key: length !== 0 ? this.state.question.tags[length - 1].key + 1 : 0, label: input }]
         }
       })
     }

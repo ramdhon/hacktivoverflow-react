@@ -835,6 +835,8 @@ Access the REST API via SERVER_URL = `http://api.hackoverflow.ramdhon.net`
     - **`POST`** *`<SERVER_URL>/watched`*
   - Header(s):
     - `token`: `String`
+  - Body:
+    - `tags`: `Array of String`
   - Expected response (status: `201`):
     ```json
       {
@@ -911,6 +913,8 @@ Access the REST API via SERVER_URL = `http://api.hackoverflow.ramdhon.net`
     - **`PATCH`** *`<SERVER_URL>/user/watched`*
   - Header(s):
     - `token`: `String`
+  - Body:
+    - `tags`: `Array of String`
   - Expected response (status: `201`):
     ```json
       {
