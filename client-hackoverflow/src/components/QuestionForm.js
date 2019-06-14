@@ -132,8 +132,6 @@ class SimpleCollapse extends React.Component {
                 value={this.state.question.title}
                 onChange={this.handleChange}
               />
-              <p>{this.state.question.description}</p>
-              <span dangerouslySetInnerHTML={{__html: this.state.question.description}} />
               <FroalaEditor
                 tag='textarea'
                 config={this.config}

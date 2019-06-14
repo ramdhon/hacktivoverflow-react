@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { withRouter } from 'react-router-dom';
 import axios from '../api/server'
 import moment from 'moment'
 
@@ -7,12 +8,15 @@ import { CounterDisplay, ListTags } from './index'
 
 function ItemList(props) {
   const [answers, setAnswers] = useState([]);
-  const { question } = props;
+  const { question, history } = props;
   const totalVotes = () => {
     return question.upvotes.length - question.downvotes.length;
   }
   const totalAnswers = () => {
     return answers.length;
+  }
+  const goToQuestionDetails = () => {
+    history.push(`/questions/${question._id}`);
   }
   
   useEffect(() => {
@@ -34,7 +38,7 @@ function ItemList(props) {
   }, [question._id])
 
   return (
-    <ListItem button divider>
+    <ListItem button onClick={goToQuestionDetails} divider>
       <ListItemText primary={
         <Grid container>
           <Grid container item xs={2}>
@@ -66,4 +70,4 @@ function ItemList(props) {
   );
 }
 
-export default ItemList;
+export default withRouter(ItemList);

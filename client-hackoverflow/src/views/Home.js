@@ -11,20 +11,7 @@ class Home extends Component {
     questions: []
   }
 
-  componentDidUpdate(prevProps, prevState) {
-    const { newQuestion } = this.props;
-
-    if (prevProps.newQuestion._id !== newQuestion._id) {
-      this.setState({
-        questions: [
-          newQuestion,
-          ...this.state.questions
-        ]
-      })
-    }
-  }
-  
-  componentDidMount() {
+  fetchQuestions = () => {
     const { setLoading } = this.props;
 
     setLoading();
@@ -48,6 +35,27 @@ class Home extends Component {
           console.log(err);
         }
       })
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    const { newQuestion } = this.props;
+
+    if (prevProps.newQuestion._id !== newQuestion._id) {
+      this.setState({
+        questions: [
+          newQuestion,
+          ...this.state.questions
+        ]
+      })
+    }
+  }
+  
+  componentDidMount() {
+    this.fetchQuestions();
+
+    const { onSetQuestionForm } = this.props;
+
+    onSetQuestionForm(true)
   }
 
   render() {

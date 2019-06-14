@@ -55,7 +55,10 @@ class MyQuestions extends Component {
   }
   
   componentDidMount() {
+    const { onSetQuestionForm } = this.props;
+
     this.checkLog();
+    onSetQuestionForm(true)
   }
 
   render() {

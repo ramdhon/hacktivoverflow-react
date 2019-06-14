@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
 import { connect } from 'react-redux'
 import axios from './api/server'
 
-import { Home, MyQuestions } from './views'
+import { Home, MyQuestions, Question } from './views'
 import { NavBar, WatchedTags, QuestionForm } from './components'
 import { createMuiTheme } from '@material-ui/core/styles';
 import { ThemeProvider } from '@material-ui/styles';
@@ -24,7 +24,8 @@ class Root extends Component {
     newQuestion: {
       _id: ''
     },
-    tagsSuggestions: []
+    tagsSuggestions: [],
+    showQuestionForm: false
   }
 
   checkLog = () => {
@@ -75,6 +76,10 @@ class Root extends Component {
       })
   }
 
+  handleShowQuestionForm = (param) => {
+    this.setState({ showQuestionForm: param })
+  }
+
   componentDidMount() {
     this.checkLog();
   }
@@ -89,10 +94,14 @@ class Root extends Component {
           <Container style={{ paddingTop: "100px" }} fixed>
             <Grid container>
               <Grid style={{ paddingRight: "20px" }} item xs={8}>
-                <QuestionForm onSubmitQuestion={this.handleSubmitQuestion} />
+                {
+                  this.state.showQuestionForm &&
+                  <QuestionForm onSubmitQuestion={this.handleSubmitQuestion} />
+                }
                 <Switch>
-                  <Route path="/" exact render={(props) => (<Home newQuestion={this.state.newQuestion} {...props} />)} />
-                  <Route path="/user/questions" render={(props) => (<MyQuestions {...props} />)} />
+                  <Route path="/" exact render={(props) => (<Home onSetQuestionForm={this.handleShowQuestionForm} newQuestion={this.state.newQuestion} {...props} />)} />
+                  <Route path="/user/questions" render={(props) => (<MyQuestions onSetQuestionForm={this.handleShowQuestionForm} {...props} />)} />
+                  <Route path="/questions/:id" render={(props) => (<Question onSetQuestionForm={this.handleShowQuestionForm} {...props} />)} />
                 </Switch>
               </Grid>
               <Grid style={{ paddingLeft: "20px" }} item xs={4}>
